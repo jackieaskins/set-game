@@ -17,5 +17,21 @@
 
   git-hooks.hooks = {
     commitizen.enable = true;
+
+    eslint = {
+      enable = true;
+      settings = {
+        binPath = "./node_modules/.bin/eslint";
+        extensions = "\.(js|ts|svelte)$";
+      };
+    };
+
+    prettier = {
+      enable = true;
+      settings = {
+        binPath = "./node_modules/.bin/prettier";
+        configPath = "./.prettierrc";
+      };
+    };
   };
 }
