@@ -27,6 +27,7 @@
     text-align: center;
 
     font-size: 0.8rem;
+    font-weight: bold;
   }
 
   .variant-default {

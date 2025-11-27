@@ -57,18 +57,15 @@
   {#if matchState.status === "successful"}
     <Alert variant="success">
       {#if matches.all.length >= 6}
-        <div><b>Congratulations! You found all 6 matches!</b></div>
-        <div>Current streak: 4 days</div>
+        Congratulations! You found all 6 matches!
       {:else}
         You found a valid match!
       {/if}
     </Alert>
   {:else if matchState.status === "error"}
-    <Alert variant="error"><b>{matchState.error.message}</b></Alert>
+    <Alert variant="error">{matchState.error.message}</Alert>
   {:else}
-    <Alert variant="default">
-      <b>Select 3 cards to see if they're a match.</b>
-    </Alert>
+    <Alert variant="default">Select 3 cards to see if they're a match.</Alert>
   {/if}
 
   <h2>Found matches ({matches.all.length} / 6):</h2>
