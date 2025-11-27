@@ -18,14 +18,14 @@
     width: 100%;
 
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     border: 2px solid;
     padding: 10px;
 
     text-align: center;
 
-    font-weight: bold;
     font-size: 0.8rem;
   }
 

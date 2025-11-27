@@ -12,8 +12,4 @@ button:hover {
   &:enabled {
     cursor: pointer;
   }
-
-  &:disabled {
-    cursor: not-allowed;
-  }
 }
