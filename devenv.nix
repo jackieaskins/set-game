@@ -1,9 +1,6 @@
 # https://devenv.sh/reference/options
 
-{ inputs, pkgs, ... }:
-let
-  pkgs-unstable = import inputs.nixpkgs-unstable { system = pkgs.stdenv.system; };
-in
+{ ... }:
 {
   languages = {
     javascript = {
@@ -19,10 +16,7 @@ in
   };
 
   git-hooks.hooks = {
-    commitizen = {
-      enable = true;
-      package = pkgs-unstable.commitizen;
-    };
+    commitizen.enable = true;
 
     eslint = {
       enable = true;
