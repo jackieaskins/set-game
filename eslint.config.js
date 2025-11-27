@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { includeIgnoreFile } from "@eslint/compat";
 import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import prettierConfig from "eslint-config-prettier";
 import sveltePlugin from "eslint-plugin-svelte";
 import globals from "globals";
@@ -14,7 +15,7 @@ import svelteConfig from "./svelte.config.js";
 const __dirname = import.meta.dirname;
 const gitignorePath = path.resolve(__dirname, ".gitignore");
 
-export default tseslint.config(
+export default defineConfig(
   includeIgnoreFile(gitignorePath),
 
   eslint.configs.recommended,
