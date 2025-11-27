@@ -7,8 +7,9 @@
 
   interface CardProps {
     cardDetails: CardDetails;
-    isSelected: boolean;
-    onclick: () => void;
+    disabled?: boolean;
+    isSelected?: boolean;
+    onclick?: () => void;
   }
 
   const shapeMap = {
@@ -27,7 +28,7 @@
 
   const fullWidth = padding * 2 + shapeWidth * 3;
 
-  let { cardDetails, isSelected, onclick }: CardProps = $props();
+  let { cardDetails, disabled, isSelected = false, onclick }: CardProps = $props();
   let { key, count, color, pattern, shape } = cardDetails;
 
   let patternId = $derived(`${key}-pattern`);
@@ -47,7 +48,7 @@
   let positions = $derived(countPositionsMap[count]);
 </script>
 
-<button class="card" class:selected={isSelected} {onclick}>
+{#snippet cardSVG()}
   <SVG width={fullWidth} height={120}>
     {#if pattern === Pattern.Striped}
       <pattern
@@ -67,20 +68,29 @@
       {/each}
     </g>
   </SVG>
-</button>
+{/snippet}
+
+{#if onclick}
+  <button class="card" class:selected={isSelected} {onclick} {disabled}>
+    <!-- eslint-disable-next-line @typescript-eslint/no-confusing-void-expression -->
+    {@render cardSVG()}
+  </button>
+{:else}
+  <!-- eslint-disable-next-line @typescript-eslint/no-confusing-void-expression -->
+  <div class="card">{@render cardSVG()}</div>
+{/if}
 
 <style>
   .card {
     --card-color: #e8e8e8;
 
     background-color: white;
-
     border: 2px var(--card-color) solid;
-    border-radius: 1rem;
+  }
 
-    &:hover {
+  button.card {
+    &:hover:enabled {
       border-color: #d3d3d3;
-      cursor: pointer;
     }
   }
 

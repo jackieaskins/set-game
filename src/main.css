@@ -4,4 +4,16 @@ body {
     helvetica, Ubuntu, roboto, noto, arial, sans-serif;
 
   padding: 16px;
+
+  color: #494949;
+}
+
+button:hover {
+  &:enabled {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
