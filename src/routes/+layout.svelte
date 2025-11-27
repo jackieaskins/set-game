@@ -2,6 +2,9 @@
   import favicon from "$lib/assets/favicon.svg";
   import type { Snippet } from "svelte";
 
+  import "../css-reset.css";
+  import "../main.css";
+
   let { children }: { children?: Snippet } = $props();
 </script>
 
