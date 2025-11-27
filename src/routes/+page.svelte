@@ -1,25 +1,11 @@
 <script lang="ts">
   import { Card } from "$lib/components";
   import { Alert } from "$lib/components";
-  import { Color, Pattern, Shape, CardDetails } from "$lib/types";
+  import { CardDetails } from "$lib/types";
+  import { cards } from "$lib/cards";
   import { Matches } from "$lib/state/matches.svelte";
 
   type MatchState = { status: "idle" | "successful" } | { status: "error"; error: Error };
-
-  const cards: CardDetails[] = [
-    new CardDetails(1, Color.Red, Pattern.Solid, Shape.Oval),
-    new CardDetails(2, Color.Red, Pattern.Striped, Shape.Oval),
-    new CardDetails(3, Color.Red, Pattern.Outlined, Shape.Oval),
-    new CardDetails(1, Color.Green, Pattern.Solid, Shape.Diamond),
-    new CardDetails(2, Color.Green, Pattern.Striped, Shape.Diamond),
-    new CardDetails(3, Color.Green, Pattern.Outlined, Shape.Diamond),
-    new CardDetails(1, Color.Purple, Pattern.Solid, Shape.Squiggle),
-    new CardDetails(2, Color.Purple, Pattern.Striped, Shape.Squiggle),
-    new CardDetails(3, Color.Purple, Pattern.Outlined, Shape.Squiggle),
-    new CardDetails(1, Color.Red, Pattern.Solid, Shape.Diamond),
-    new CardDetails(2, Color.Green, Pattern.Striped, Shape.Squiggle),
-    new CardDetails(3, Color.Purple, Pattern.Outlined, Shape.Oval),
-  ];
 
   let selectedCards: CardDetails[] = $state([]);
   let hasSelectedMaxCards = $derived(selectedCards.length >= 3);
