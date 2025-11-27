@@ -1,15 +1,14 @@
 <script lang="ts">
   import { SVG } from "$lib/components";
-  import { Color, Pattern, Shape, ShapeCount } from "$lib/types";
+  import { Pattern, Shape, type CardDetails } from "$lib/types";
   import DiamondShape from "./DiamondShape.svelte";
   import OvalShape from "./OvalShape.svelte";
   import SquiggleShape from "./SquiggleShape.svelte";
 
   interface CardProps {
-    count: ShapeCount;
-    shape: Shape;
-    pattern: Pattern;
-    color: Color;
+    cardDetails: CardDetails;
+    isSelected: boolean;
+    onclick: () => void;
   }
 
   const shapeMap = {
@@ -18,9 +17,9 @@
     [Shape.Squiggle]: SquiggleShape,
   };
   const countPositionsMap = {
-    1: [70],
-    2: [35, 115],
-    3: [10, 70, 130],
+    1: [75],
+    2: [42, 108],
+    3: [15, 75, 135],
   };
 
   const padding = 10;
@@ -28,9 +27,10 @@
 
   const fullWidth = padding * 2 + shapeWidth * 3;
 
-  let { count, shape, pattern, color }: CardProps = $props();
+  let { cardDetails, isSelected, onclick }: CardProps = $props();
+  let { key, count, color, pattern, shape } = cardDetails;
 
-  let patternId = $derived(`${String(count)}-${color}-${pattern}-${shape}-pattern`);
+  let patternId = $derived(`${key}-pattern`);
 
   let fill = $derived.by(() => {
     switch (pattern) {
@@ -47,22 +47,44 @@
   let positions = $derived(countPositionsMap[count]);
 </script>
 
-<SVG width={fullWidth} height={120}>
-  {#if pattern === Pattern.Striped}
-    <pattern
-      id={patternId}
-      patternUnits="userSpaceOnUse"
-      patternTransform="rotate(90)"
-      width="8.5"
-      height="8.5"
-    >
-      <line x1="0" y="0" x2="0" y2="8.5" stroke={color} stroke-width="7" />
-    </pattern>
-  {/if}
+<button class="card" class:selected={isSelected} {onclick}>
+  <SVG width={fullWidth} height={120}>
+    {#if pattern === Pattern.Striped}
+      <pattern
+        id={patternId}
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(90)"
+        width="8.5"
+        height="8.5"
+      >
+        <line x1="0" y="0" x2="0" y2="8.5" stroke={color} stroke-width="7" />
+      </pattern>
+    {/if}
 
-  <g stroke={color} stroke-width={4} {fill}>
-    {#each positions as position (position)}
-      <ShapeComponent x={position} />
-    {/each}
-  </g>
-</SVG>
+    <g stroke={color} stroke-width={4} {fill}>
+      {#each positions as position (position)}
+        <ShapeComponent x={position} />
+      {/each}
+    </g>
+  </SVG>
+</button>
+
+<style>
+  .card {
+    --card-color: #e8e8e8;
+
+    background-color: white;
+
+    border: 2px var(--card-color) solid;
+    border-radius: 1rem;
+
+    &:hover {
+      border-color: #d3d3d3;
+      cursor: pointer;
+    }
+  }
+
+  .selected {
+    background-color: var(--card-color);
+  }
+</style>

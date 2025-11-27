@@ -7,7 +7,7 @@
 
   let { x }: SquiggleShapeProps = $props();
 
-  const baseX = x + 10;
+  const baseX = x + 4;
   const y = 13;
 </script>
 

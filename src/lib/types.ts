@@ -19,17 +19,15 @@ export const Pattern = {
 } as const;
 export type Pattern = (typeof Pattern)[keyof typeof Pattern];
 
-export const ShapeCount = {
-  One: 1,
-  Two: 2,
-  Three: 3,
-} as const;
-export type ShapeCount = (typeof ShapeCount)[keyof typeof ShapeCount];
+export class CardDetails {
+  constructor(
+    public readonly count: 1 | 2 | 3,
+    public readonly color: Color,
+    public readonly pattern: Pattern,
+    public readonly shape: Shape,
+  ) {}
 
-export interface Card {
-  key: string;
-  color: Color;
-  shape: Shape;
-  pattern: Pattern;
-  count: ShapeCount;
+  public get key() {
+    return [this.count, this.color, this.pattern, this.shape].join("-");
+  }
 }
