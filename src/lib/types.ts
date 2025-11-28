@@ -27,7 +27,7 @@ export class CardDetails {
     public readonly shape: Shape,
   ) {}
 
-  public get key() {
+  public get key(): string {
     return [this.count, this.color, this.pattern, this.shape].join("-");
   }
 }

@@ -1420,16 +1420,23 @@ function shuffle<T>(arr: T[], random: () => number) {
   return arr;
 }
 
-function getCardsFor(date: string) {
+const CARD_CACHE: Partial<Record<string, CardDetails[]>> = {};
+
+export function getCardsFor(date: string): CardDetails[] {
+  if (CARD_CACHE[date]) {
+    return CARD_CACHE[date];
+  }
+
   const random = seed(date);
 
   const cards = COMBINATIONS[Math.floor(random() * COMBINATIONS.length)];
   shuffle(cards, random);
 
-  return cards.map(
+  const cardDetails = cards.map(
     ([count, color, pattern, shape]) => new CardDetails(count, color, pattern, shape),
   );
-}
 
-const today = new Intl.DateTimeFormat("en-US").format(new Date());
-export const cards = getCardsFor(today);
+  CARD_CACHE[date] = cardDetails;
+
+  return cardDetails;
+}

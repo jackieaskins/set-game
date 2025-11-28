@@ -1,30 +1,37 @@
 <script lang="ts">
-  import { Card } from "$lib/components";
-  import { Alert } from "$lib/components";
+  import { Alert, Card } from "$lib/components";
+  import { setGameContext } from "$lib/context/gameContext";
+  import GameState from "$lib/state/GameState.svelte";
   import { CardDetails } from "$lib/types";
-  import { cards } from "$lib/cards";
-  import { Matches } from "$lib/state/matches.svelte";
+  import GameTimer from "./GameTimer.svelte";
+  import PageHeader from "./PageHeader.svelte";
 
   type MatchState = { status: "idle" | "successful" } | { status: "error"; error: Error };
 
   let selectedCards: CardDetails[] = $state([]);
   let hasSelectedMaxCards = $derived(selectedCards.length >= 3);
+
   let matchState = $state<MatchState>({ status: "idle" });
-  let matches = new Matches();
 
   function isCardSelected({ key }: CardDetails) {
     return selectedCards.some((card) => card.key === key);
   }
+
+  const gameState = setGameContext(new GameState());
+
+  $effect(() => () => {
+    gameState.destroy();
+  });
 </script>
 
 <div class="wrapper">
-  <h1>Daily Set Game</h1>
+  <PageHeader />
 
   <div class="cards">
-    {#each cards as card (card.key)}
+    {#each gameState.cards as card (card.key)}
       <Card
         cardDetails={card}
-        disabled={matches.all.length === 6 || (hasSelectedMaxCards && !isCardSelected(card))}
+        disabled={gameState.sets.length === 6 || (hasSelectedMaxCards && !isCardSelected(card))}
         isSelected={isCardSelected(card)}
         onclick={() => {
           const { key } = card;
@@ -37,7 +44,7 @@
 
           if (hasSelectedMaxCards) {
             try {
-              matches.tryAddMatch(selectedCards);
+              gameState.tryAddSet(selectedCards);
               matchState = { status: "successful" };
               selectedCards = [];
             } catch (error) {
@@ -56,8 +63,8 @@
 
   {#if matchState.status === "successful"}
     <Alert variant="success">
-      {#if matches.all.length >= 6}
-        Congratulations! You found all 6 matches!
+      {#if gameState.sets.length >= 6}
+        Congratulations! You found all 6 matches in <GameTimer format="short" />!
       {:else}
         You found a valid match!
       {/if}
@@ -68,11 +75,11 @@
     <Alert variant="default">Select 3 cards to see if they're a match.</Alert>
   {/if}
 
-  <h2>Found matches ({matches.all.length} / 6):</h2>
-
   <!-- TODO: Fix semantics -->
   <div class="matches">
-    {#each matches.all as { key, cards } (key)}
+    <h2>Found sets ({gameState.sets.length} / 6):</h2>
+
+    {#each gameState.sets as { key, cards } (key)}
       <div class="match">
         {#each cards as card (card.key)}
           <Card cardDetails={card} />
@@ -88,7 +95,6 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 16px;
   }
 
