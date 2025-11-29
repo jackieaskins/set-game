@@ -64,7 +64,7 @@
   {#if matchState.status === "successful"}
     <Alert variant="success">
       {#if gameState.sets.length >= 6}
-        Congratulations! You found all 6 matches in <GameTimer format="short" />!
+        Congratulations! You found all 6 sets in <GameTimer format="short" />!
       {:else}
         You found a valid match!
       {/if}

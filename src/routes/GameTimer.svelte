@@ -28,7 +28,7 @@
           hours > 0 ? padNumber(minutes) : minutes,
           padNumber(seconds),
         ]
-          .filter((val) => !!val)
+          .filter((val) => val != undefined)
           .join(":"),
   );
 </script>
