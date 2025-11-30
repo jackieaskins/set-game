@@ -3,7 +3,8 @@ import { CardDetails, type CardDetailsJSON } from "$lib/types";
 import { isValidSet } from "$lib/utils/set";
 import { SvelteDate } from "svelte/reactivity";
 import type { MessageState } from "./MessageState.svelte";
-import { ONE_SECOND_MS } from "$lib/constants";
+import GameTimerState from "./GameTimerState.svelte";
+import { getPageVisibilityContext } from "$lib/context/pageVisibilityContext";
 
 interface GameStateStorage {
   dateId: string;
@@ -20,11 +21,11 @@ export default class GameState {
   readonly #dateId = new Intl.DateTimeFormat("en-US").format(this.date);
   readonly #cards = getCardsFor(this.#dateId);
 
+  readonly #pageVisibilityState = getPageVisibilityContext();
+  readonly #timer = new GameTimerState();
   readonly #messageState: MessageState;
 
   readonly #timerOffset: number;
-  readonly #timeInterval: number;
-  #timeElapsed = $state(0);
 
   #sets: CardSet[];
 
@@ -36,13 +37,17 @@ export default class GameState {
     this.#timerOffset = timeElapsed;
     this.#sets = $state(sets.map((cards) => new CardSet(cards)));
 
-    this.#timeInterval = setInterval(() => {
-      this.#timeElapsed = new SvelteDate().getTime() - this.date.getTime();
-    }, ONE_SECOND_MS);
+    $effect(() => {
+      if (this.#pageVisibilityState.isVisible) {
+        this.#timer.start();
+      } else {
+        this.#timer.pause();
+      }
+    });
 
     $effect(() => {
       if (this.sets.length >= EXPECTED_SETS) {
-        clearInterval(this.#timeInterval);
+        this.#timer.stop();
       }
     });
 
@@ -77,7 +82,7 @@ export default class GameState {
   }
 
   public get timeElapsed(): number {
-    return this.#timeElapsed + this.#timerOffset;
+    return this.#timer.timeElapsed + this.#timerOffset;
   }
 
   public get cards(): CardDetails[] {
@@ -101,10 +106,6 @@ export default class GameState {
 
     this.#sets = [new CardSet(cards), ...this.sets];
     this.#messageState.message = { type: "success", text: "Yay! You found a new set!" };
-  }
-
-  public destroy(): void {
-    clearInterval(this.#timeInterval);
   }
 }
 

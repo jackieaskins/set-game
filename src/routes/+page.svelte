@@ -25,10 +25,6 @@
   );
   const gameState = setGameContext(new GameState(alertState));
 
-  $effect(() => () => {
-    gameState.destroy();
-  });
-
   $effect(() => {
     if (selectedCardTimeout != undefined) {
       return () => {
