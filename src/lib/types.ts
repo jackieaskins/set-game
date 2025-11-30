@@ -1,3 +1,5 @@
+export type MessageType = "success" | "error" | "default";
+
 export const Color = {
   Red: "red",
   Green: "green",

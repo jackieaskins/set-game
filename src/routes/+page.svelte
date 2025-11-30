@@ -1,26 +1,40 @@
 <script lang="ts">
   import { Alert, Card } from "$lib/components";
+  import { CARD_SELECTION_TIMEOUT_MS } from "$lib/constants";
   import { setGameContext } from "$lib/context/gameContext";
+  import { setMessageContext } from "$lib/context/messageContext";
   import GameState from "$lib/state/GameState.svelte";
+  import { MessageState } from "$lib/state/MessageState.svelte";
   import { CardDetails } from "$lib/types";
-  import GameTimer from "./GameTimer.svelte";
   import PageHeader from "./PageHeader.svelte";
 
-  type MatchState = { status: "idle" | "successful" } | { status: "error"; error: Error };
+  let selectedCardTimeout: number | undefined;
 
   let selectedCards: CardDetails[] = $state([]);
   let hasSelectedMaxCards = $derived(selectedCards.length >= 3);
-
-  let matchState = $state<MatchState>({ status: "idle" });
 
   function isCardSelected({ key }: CardDetails) {
     return selectedCards.some((card) => card.key === key);
   }
 
-  const gameState = setGameContext(new GameState());
+  const alertState = setMessageContext(
+    new MessageState({
+      type: "default",
+      text: "Select 3 cards to see if they form a set.",
+    }),
+  );
+  const gameState = setGameContext(new GameState(alertState));
 
   $effect(() => () => {
     gameState.destroy();
+  });
+
+  $effect(() => {
+    if (selectedCardTimeout != undefined) {
+      return () => {
+        clearTimeout(selectedCardTimeout);
+      };
+    }
   });
 </script>
 
@@ -43,37 +57,20 @@
           }
 
           if (hasSelectedMaxCards) {
-            try {
-              gameState.tryAddSet(selectedCards);
-              matchState = { status: "successful" };
+            gameState.tryAddSet(selectedCards);
+
+            selectedCardTimeout = setTimeout(() => {
               selectedCards = [];
-            } catch (error) {
-              matchState = {
-                status: "error",
-                error: error instanceof Error ? error : new Error("Unknown error"),
-              };
-            }
-          } else {
-            matchState = { status: "idle" };
+            }, CARD_SELECTION_TIMEOUT_MS);
           }
         }}
       />
     {/each}
   </div>
 
-  {#if matchState.status === "successful"}
-    <Alert variant="success">
-      {#if gameState.sets.length >= 6}
-        Congratulations! You found all 6 sets in <GameTimer format="short" />!
-      {:else}
-        You found a valid match!
-      {/if}
-    </Alert>
-  {:else if matchState.status === "error"}
-    <Alert variant="error">{matchState.error.message}</Alert>
-  {:else}
-    <Alert variant="default">Select 3 cards to see if they're a match.</Alert>
-  {/if}
+  <Alert variant={alertState.message.type}>
+    {alertState.message.text}
+  </Alert>
 
   <!-- TODO: Fix semantics -->
   <div class="matches">

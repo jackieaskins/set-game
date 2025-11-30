@@ -1,9 +1,10 @@
 <script lang="ts">
+  import type { MessageType } from "$lib/types";
   import type { Snippet } from "svelte";
 
   export interface AlertProps {
     children: Snippet;
-    variant?: "success" | "error" | "default";
+    variant?: MessageType;
   }
 
   let { children, variant = "default" }: AlertProps = $props();

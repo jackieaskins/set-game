@@ -2,6 +2,8 @@ import { getCardsFor } from "$lib/cards";
 import { CardDetails, type CardDetailsJSON } from "$lib/types";
 import { isValidSet } from "$lib/utils/set";
 import { SvelteDate } from "svelte/reactivity";
+import type { MessageState } from "./MessageState.svelte";
+import { ONE_SECOND_MS } from "$lib/constants";
 
 interface GameStateStorage {
   dateId: string;
@@ -18,13 +20,17 @@ export default class GameState {
   readonly #dateId = new Intl.DateTimeFormat("en-US").format(this.date);
   readonly #cards = getCardsFor(this.#dateId);
 
+  readonly #messageState: MessageState;
+
   readonly #timerOffset: number;
   readonly #timeInterval: number;
   #timeElapsed = $state(0);
 
   #sets: CardSet[];
 
-  public constructor() {
+  public constructor(messageState: MessageState) {
+    this.#messageState = messageState;
+
     const { timeElapsed, sets } = this.getSavedGameState();
 
     this.#timerOffset = timeElapsed;
@@ -32,7 +38,7 @@ export default class GameState {
 
     this.#timeInterval = setInterval(() => {
       this.#timeElapsed = new SvelteDate().getTime() - this.date.getTime();
-    }, 1000);
+    }, ONE_SECOND_MS);
 
     $effect(() => {
       if (this.sets.length >= EXPECTED_SETS) {
@@ -84,14 +90,17 @@ export default class GameState {
 
   public tryAddSet(cards: CardDetails[]): void {
     if (!isValidSet(cards)) {
-      throw new Error("Not a match :(");
+      this.#messageState.message = { type: "error", text: "Not a set. :(" };
+      return;
     }
 
-    if (this.sets.some((set) => cards.every((card) => set.cardKeys.includes(card.key)))) {
-      throw new Error("You already found that set :(");
+    if (this.sets.some((set) => set.hasAllCards(cards))) {
+      this.#messageState.message = { type: "error", text: "You already found that set. :(" };
+      return;
     }
 
     this.#sets = [new CardSet(cards), ...this.sets];
+    this.#messageState.message = { type: "success", text: "Yay! You found a new set!" };
   }
 
   public destroy(): void {
@@ -108,5 +117,9 @@ class CardSet {
 
   public get key() {
     return this.cardKeys.join("&&");
+  }
+
+  public hasAllCards(cards: CardDetails[]) {
+    return cards.every((card) => this.cardKeys.includes(card.key));
   }
 }
