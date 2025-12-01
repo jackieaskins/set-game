@@ -8,8 +8,10 @@ body {
   color: #494949;
 }
 
-button:hover {
-  &:enabled {
+button {
+  border: none;
+
+  &:hover:enabled {
     cursor: pointer;
   }
 }

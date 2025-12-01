@@ -1,11 +1,12 @@
 <script lang="ts">
   import { Alert, Card } from "$lib/components";
-  import { CARD_SELECTION_TIMEOUT_MS } from "$lib/constants";
+  import { CARD_SELECTION_TIMEOUT_MS, NUM_SETS } from "$lib/constants";
   import { setGameContext } from "$lib/context/gameContext";
   import { setMessageContext } from "$lib/context/messageContext";
   import GameState from "$lib/state/GameState.svelte";
   import { MessageState } from "$lib/state/MessageState.svelte";
   import { CardDetails } from "$lib/types";
+  import GameWonModal from "./GameWonModal.svelte";
   import PageHeader from "./PageHeader.svelte";
 
   let selectedCardTimeout: number | undefined;
@@ -34,6 +35,8 @@
   });
 </script>
 
+<GameWonModal />
+
 <div class="wrapper">
   <PageHeader />
 
@@ -41,7 +44,8 @@
     {#each gameState.cards as card (card.key)}
       <Card
         cardDetails={card}
-        disabled={gameState.sets.length === 6 || (hasSelectedMaxCards && !isCardSelected(card))}
+        disabled={gameState.sets.length >= NUM_SETS ||
+          (hasSelectedMaxCards && !isCardSelected(card))}
         isSelected={isCardSelected(card)}
         onclick={() => {
           const { key } = card;
@@ -64,13 +68,15 @@
     {/each}
   </div>
 
-  <Alert variant={alertState.message.type}>
-    {alertState.message.text}
-  </Alert>
+  {#if gameState.sets.length < NUM_SETS}
+    <Alert variant={alertState.message.type}>
+      {alertState.message.text}
+    </Alert>
+  {/if}
 
   <!-- TODO: Fix semantics -->
   <div class="matches">
-    <h2>Found sets ({gameState.sets.length} / 6):</h2>
+    <h2>Found sets ({gameState.sets.length} / {NUM_SETS}):</h2>
 
     {#each gameState.sets as { key, cards } (key)}
       <div class="match">
