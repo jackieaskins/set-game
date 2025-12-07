@@ -1,6 +1,12 @@
 <script lang="ts">
   import { Alert, Card } from "$lib/components";
-  import { CARD_SELECTION_TIMEOUT_MS, NUM_SETS } from "$lib/constants";
+  import SVG from "$lib/components/SVG/SVG.svelte";
+  import {
+    CARD_SELECTION_TIMEOUT_MS,
+    CARD_SVG_HEIGHT,
+    CARD_SVG_WIDTH,
+    NUM_SETS,
+  } from "$lib/constants";
   import { setGameContext } from "$lib/context/gameContext";
   import { setMessageContext } from "$lib/context/messageContext";
   import GameState from "$lib/state/GameState.svelte";
@@ -85,6 +91,16 @@
         {/each}
       </div>
     {/each}
+
+    {#each new Array(NUM_SETS - gameState.sets.length)}
+      <div class="match">
+        {#each new Array(3)}
+          <SVG width={CARD_SVG_WIDTH} height={CARD_SVG_HEIGHT}>
+            <rect width="100%" height="100%" fill="#e8e8e8" />
+          </SVG>
+        {/each}
+      </div>
+    {/each}
   </div>
 </div>
 
@@ -116,6 +132,6 @@
     width: 50%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 4px;
   }
 </style>

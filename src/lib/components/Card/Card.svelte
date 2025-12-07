@@ -1,5 +1,6 @@
 <script lang="ts">
   import { SVG } from "$lib/components";
+  import { CARD_SVG_HEIGHT, CARD_SVG_WIDTH } from "$lib/constants";
   import { Pattern, Shape, type CardDetails } from "$lib/types";
   import DiamondShape from "./DiamondShape.svelte";
   import OvalShape from "./OvalShape.svelte";
@@ -23,11 +24,6 @@
     3: [15, 75, 135],
   };
 
-  const padding = 10;
-  const shapeWidth = 60;
-
-  const fullWidth = padding * 2 + shapeWidth * 3;
-
   let { cardDetails, disabled, isSelected = false, onclick }: CardProps = $props();
   let { key, count, color, pattern, shape } = cardDetails;
 
@@ -49,7 +45,7 @@
 </script>
 
 {#snippet cardSVG()}
-  <SVG width={fullWidth} height={120}>
+  <SVG width={CARD_SVG_WIDTH} height={CARD_SVG_HEIGHT}>
     {#if pattern === Pattern.Striped}
       <pattern
         id={patternId}
