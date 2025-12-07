@@ -42,34 +42,45 @@
 </script>
 
 <dialog bind:this={dialog} closedby="any">
-  <h2>Congratulations! You're so smart!</h2>
+  <h2>Yayyy! You did it!</h2>
 
-  <p>Yayyyy! You did it!</p>
+  <p>Wow you're so smart!</p>
   <p>You solved today's Set Game puzzle in <b>{shortTime}</b>.</p>
 
-  <button
-    class="share"
-    disabled={justShared}
-    onclick={async () => {
-      const title = `Set Game: ${formattedDate}`;
-      const text = `I solved today's Set Game in ${shortTime}!`;
-      const url = window.location.href;
+  <div class="actions">
+    <button
+      class="share"
+      disabled={justShared}
+      onclick={async () => {
+        const title = `Set Game: ${formattedDate}`;
+        const text = `I solved today's Set Game in ${shortTime}!`;
+        const url = window.location.href;
 
-      if (canShare) {
-        await navigator.share({ title, text, url });
-      } else {
-        await navigator.clipboard.writeText([title, text, url].join("\n"));
-      }
+        if (canShare) {
+          await navigator.share({ title, text, url });
+        } else {
+          await navigator.clipboard.writeText([title, text, url].join("\n"));
+        }
 
-      justShared = true;
-    }}
-  >
-    {#if justShared}
-      Successfully {canShare ? "shared" : "copied"} results
-    {:else}
-      {canShare ? "Share" : "Copy"} results
-    {/if}
-  </button>
+        justShared = true;
+      }}
+    >
+      {#if justShared}
+        Successfully {canShare ? "shared" : "copied"} results
+      {:else}
+        {canShare ? "Share" : "Copy"} results
+      {/if}
+    </button>
+
+    <button
+      class="close"
+      onclick={() => {
+        dialog.close();
+      }}
+    >
+      Close
+    </button>
+  </div>
 </dialog>
 
 <style>
@@ -77,7 +88,6 @@
     width: 80%;
     max-width: 440px;
     margin: auto;
-    text-align: center;
     padding: 32px;
     color: inherit;
 
@@ -87,18 +97,35 @@
       background-color: black;
       opacity: 0.5;
     }
+
+    @media only screen and (max-width: 600px) {
+      width: 100%;
+      max-width: 100%;
+      top: 25%;
+      height: 75%;
+      margin: 0;
+    }
   }
 
   h2 {
     margin-bottom: 10px;
   }
 
-  .share {
+  button {
     width: 100%;
-    color: white;
     height: 2.4rem;
+  }
 
+  .actions {
     margin-top: 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .share {
+    color: white;
 
     &:enabled {
       background-color: #3d53e6;
