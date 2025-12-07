@@ -98,12 +98,11 @@
       opacity: 0.5;
     }
 
+    /* sheet */
     @media only screen and (max-width: 600px) {
       width: 100%;
       max-width: 100%;
-      top: 25%;
-      height: 75%;
-      margin: 0;
+      margin: auto 0 0 0;
     }
   }
 
@@ -122,6 +121,10 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+  }
+
+  .close {
+    color: inherit;
   }
 
   .share {
