@@ -15,3 +15,8 @@ button {
     cursor: pointer;
   }
 }
+
+* {
+  /* Disable zoom on double tap */
+  touch-action: manipulation;
+}
