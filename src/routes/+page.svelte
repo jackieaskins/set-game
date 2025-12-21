@@ -41,6 +41,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Daily Set Game</title>
+</svelte:head>
+
 <GameWonModal />
 
 <div class="wrapper">
