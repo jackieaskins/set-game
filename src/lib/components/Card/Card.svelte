@@ -78,19 +78,20 @@
 
 <style>
   .card {
-    --card-color: #e8e8e8;
+    --select-color: #d3d3d3;
 
     background-color: white;
-    border: 2px var(--card-color) solid;
+    border: 2px #e8e8e8 solid;
   }
 
   button.card {
     &:hover:enabled {
-      border-color: #d3d3d3;
+      border-color: var(--select-color);
     }
   }
 
   .selected {
-    background-color: var(--card-color);
+    background-color: var(--select-color);
+    border-color: var(--select-color);
   }
 </style>
