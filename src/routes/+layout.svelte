@@ -1,5 +1,4 @@
 <script lang="ts">
-  import favicon from "$lib/assets/favicon.svg";
   import type { Snippet } from "svelte";
 
   import "../css-reset.css";
@@ -11,9 +10,5 @@
 
   setPageVisibilityContext(new PageVisibilityState());
 </script>
-
-<svelte:head>
-  <link rel="icon" href={favicon} />
-</svelte:head>
 
 {@render children?.()}
