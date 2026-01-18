@@ -25,7 +25,7 @@
   };
 
   let { cardDetails, disabled, isSelected = false, onclick }: CardProps = $props();
-  let { key, count, color, pattern, shape } = cardDetails;
+  let { key, count, color, pattern, shape } = $derived(cardDetails);
 
   let patternId = $derived(`${key}-pattern`);
 
