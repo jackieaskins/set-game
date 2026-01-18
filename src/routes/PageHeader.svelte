@@ -9,7 +9,7 @@
 </script>
 
 <header>
-  <h1>Daily Set Game</h1>
+  <h1>Daily Set Game #{gameState.gameNumber}</h1>
   <div class="subheader">
     <div>{dateFormatter.format(gameState.date)}</div>
     <div>{elapsedTime}</div>

@@ -1,4 +1,5 @@
 export const ONE_SECOND_MS = 1000;
+export const ONE_DAY_MS = ONE_SECOND_MS * 60 * 60 * 24;
 
 export const MESSAGE_TIMEOUT_MS = 1000;
 export const CARD_SELECTION_TIMEOUT_MS = 250;

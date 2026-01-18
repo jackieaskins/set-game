@@ -5,6 +5,7 @@ import { SvelteDate } from "svelte/reactivity";
 import type { MessageState } from "./MessageState.svelte";
 import GameTimerState from "./GameTimerState.svelte";
 import { getPageVisibilityContext } from "$lib/context/pageVisibilityContext";
+import { ONE_DAY_MS } from "$lib/constants";
 
 interface GameStateStorage {
   dateId: string;
@@ -12,12 +13,16 @@ interface GameStateStorage {
   sets: CardDetailsJSON[][];
 }
 
+const DAY_ZERO_DATE = new Date(2025, 10, 26); // November 26, 2025
 const EXPECTED_SETS = 6;
 
 const GAME_STATE_LOCAL_STORAGE_KEY = "set-game-game-state";
 
 export default class GameState {
   public readonly date = new SvelteDate();
+  public readonly gameNumber = Math.floor(
+    (this.date.valueOf() - DAY_ZERO_DATE.valueOf()) / ONE_DAY_MS,
+  );
   readonly #dateId = new Intl.DateTimeFormat("en-US").format(this.date);
   readonly #cards = getCardsFor(this.#dateId);
 

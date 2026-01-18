@@ -5,19 +5,12 @@
 
   let dialog: HTMLDialogElement;
 
-  const dateFormatter = Intl.DateTimeFormat(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const canShare = Boolean(navigator.share);
 
-  let justShared = $state(false);
+  let justCopied = $state(false);
 
   const gameState = getGameContext();
-  let formattedDate = $derived(dateFormatter.format(gameState.date));
   let shortTime = $derived(getShortTimeFormat(gameState.timeElapsed));
 
   $effect(() => {
@@ -27,12 +20,12 @@
   });
 
   $effect(() => {
-    if (!justShared) {
+    if (!justCopied) {
       return;
     }
 
     const timeout = setTimeout(() => {
-      justShared = false;
+      justCopied = false;
     }, 500);
 
     return () => {
@@ -50,23 +43,23 @@
   <div class="actions">
     <button
       class="share"
-      disabled={justShared}
+      disabled={justCopied}
       onclick={async () => {
-        const title = `Set Game: ${formattedDate}`;
-        const text = `I solved today's Set Game in ${shortTime}!`;
-        const url = window.location.href;
+        const text = [
+          `Daily Set Game #${String(gameState.gameNumber)} | ${shortTime} 🎉`,
+          window.location.host,
+        ].join("\n");
 
         if (canShare) {
-          await navigator.share({ title, text, url });
+          await navigator.share({ text });
         } else {
-          await navigator.clipboard.writeText([title, text, url].join("\n"));
+          await navigator.clipboard.writeText(text);
+          justCopied = true;
         }
-
-        justShared = true;
       }}
     >
-      {#if justShared}
-        Successfully {canShare ? "shared" : "copied"} results
+      {#if justCopied}
+        Successfully copied results
       {:else}
         {canShare ? "Share" : "Copy"} results
       {/if}
