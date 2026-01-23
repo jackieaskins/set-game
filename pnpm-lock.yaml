@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@neoconfetti/svelte':
+        specifier: ^2.2.2
+        version: 2.2.2(svelte@5.46.4)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.4.1
@@ -299,6 +303,11 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@neoconfetti/svelte@2.2.2':
+    resolution: {integrity: sha512-E7xCFVEEm5Ctnj2udTJy1b9oaTvjz1zi1mYdEtE8rB5BVwq6kHisosDS+zdWN5PMfEMjtbsOV9Cl6tsNSAD1sA==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -1360,6 +1369,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@neoconfetti/svelte@2.2.2(svelte@5.46.4)':
+    dependencies:
+      svelte: 5.46.4
 
   '@polka/url@1.0.0-next.29': {}
 

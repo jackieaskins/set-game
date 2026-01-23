@@ -5,7 +5,7 @@ import { SvelteDate } from "svelte/reactivity";
 import type { MessageState } from "./MessageState.svelte";
 import GameTimerState from "./GameTimerState.svelte";
 import { getPageVisibilityContext } from "$lib/context/pageVisibilityContext";
-import { ONE_DAY_MS } from "$lib/constants";
+import { NUM_SETS, ONE_DAY_MS } from "$lib/constants";
 
 interface GameStateStorage {
   dateId: string;
@@ -96,6 +96,10 @@ export default class GameState {
 
   public get sets(): CardSet[] {
     return this.#sets;
+  }
+
+  public get hasWon(): boolean {
+    return this.sets.length >= NUM_SETS;
   }
 
   public tryAddSet(cards: CardDetails[]): void {

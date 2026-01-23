@@ -12,6 +12,7 @@
   import GameState from "$lib/state/GameState.svelte";
   import { MessageState } from "$lib/state/MessageState.svelte";
   import { CardDetails } from "$lib/types";
+  import Confetti from "./Confetti.svelte";
   import GameWonModal from "./GameWonModal.svelte";
   import PageHeader from "./PageHeader.svelte";
 
@@ -46,6 +47,7 @@
 </svelte:head>
 
 <GameWonModal />
+<Confetti />
 
 <div class="wrapper">
   <PageHeader />
@@ -54,8 +56,7 @@
     {#each gameState.cards as card (card.key)}
       <Card
         cardDetails={card}
-        disabled={gameState.sets.length >= NUM_SETS ||
-          (hasSelectedMaxCards && !isCardSelected(card))}
+        disabled={gameState.hasWon || (hasSelectedMaxCards && !isCardSelected(card))}
         isSelected={isCardSelected(card)}
         onclick={() => {
           const { key } = card;
@@ -78,7 +79,7 @@
     {/each}
   </div>
 
-  {#if gameState.sets.length < NUM_SETS}
+  {#if !gameState.hasWon}
     <Alert variant={alertState.message.type}>
       {alertState.message.text}
     </Alert>
