@@ -43,7 +43,7 @@
 </script>
 
 <svelte:head>
-  <title>Daily Set Game</title>
+  <title>Set Game #{gameState.gameNumber}</title>
 </svelte:head>
 
 <GameWonModal />

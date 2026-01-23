@@ -46,7 +46,7 @@
       disabled={justCopied}
       onclick={async () => {
         const text = [
-          `Daily Set Game #${String(gameState.gameNumber)} | ${shortTime} 🎉`,
+          `Set Game #${String(gameState.gameNumber)} | ${shortTime} 🎉`,
           window.location.host,
         ].join("\n");
 
