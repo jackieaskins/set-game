@@ -1,3 +1,7 @@
+:root {
+  color-scheme: light dark;
+}
+
 body {
   font-family:
     -apple-system, BlinkMacSystemFont, "avenir next", avenir, "segoe ui", "helvetica neue",
@@ -5,7 +9,8 @@ body {
 
   padding: 16px;
 
-  color: #494949;
+  color: light-dark(#494949, #d4d4d4);
+  background-color: light-dark(white, #1a1a1a);
 }
 
 button {

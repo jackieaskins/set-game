@@ -101,7 +101,7 @@
       <div class="match">
         {#each new Array(3)}
           <SVG width={CARD_SVG_WIDTH} height={CARD_SVG_HEIGHT}>
-            <rect width="100%" height="100%" fill="#e8e8e8" />
+            <rect width="100%" height="100%" fill="var(--placeholder-color)" />
           </SVG>
         {/each}
       </div>
@@ -126,6 +126,8 @@
   }
 
   .matches {
+    --placeholder-color: light-dark(#e8e8e8, #333333);
+
     display: flex;
     flex-direction: column;
     align-items: center;

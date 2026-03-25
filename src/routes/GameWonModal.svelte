@@ -83,6 +83,7 @@
     margin: auto;
     padding: 32px;
     color: inherit;
+    background-color: light-dark(white, #2a2a2a);
 
     border: none;
 
@@ -118,17 +119,19 @@
 
   .close {
     color: inherit;
+    background-color: light-dark(#e8e8e8, #444);
   }
 
   .share {
     color: white;
 
     &:enabled {
-      background-color: #3d53e6;
+      background-color: light-dark(#3d53e6, #4d63f6);
     }
 
     &:disabled {
-      background-color: #c0c7f7;
+      background-color: light-dark(#c0c7f7, #3a4080);
+      color: light-dark(white, #888);
     }
   }
 </style>

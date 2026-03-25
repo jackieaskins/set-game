@@ -32,17 +32,17 @@
   }
 
   .variant-default {
-    background-color: #dcdada;
-    color: #6c6565;
+    background-color: light-dark(#dcdada, #3a3838);
+    color: light-dark(#6c6565, #b0a8a8);
   }
 
   .variant-success {
-    background-color: #a5e4b6;
-    color: #267e3d;
+    background-color: light-dark(#a5e4b6, #1a4a2a);
+    color: light-dark(#267e3d, #7ed69a);
   }
 
   .variant-error {
-    background-color: #e8a1a1;
-    color: #ad2b2b;
+    background-color: light-dark(#e8a1a1, #4a1e1e);
+    color: light-dark(#ad2b2b, #e88a8a);
   }
 </style>

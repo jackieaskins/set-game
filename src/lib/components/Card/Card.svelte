@@ -28,11 +28,12 @@
   let { key, count, color, pattern, shape } = $derived(cardDetails);
 
   let patternId = $derived(`${key}-pattern`);
+  let cssColor = $derived(`var(--card-color-${color})`);
 
   let fill = $derived.by(() => {
     switch (pattern) {
       case Pattern.Solid:
-        return color;
+        return cssColor;
       case Pattern.Striped:
         return `url(#${patternId})`;
       case Pattern.Outlined:
@@ -54,11 +55,11 @@
         width="8.5"
         height="8.5"
       >
-        <line x1="0" y="0" x2="0" y2="8.5" stroke={color} stroke-width="7" />
+        <line x1="0" y="0" x2="0" y2="8.5" stroke={cssColor} stroke-width="7" />
       </pattern>
     {/if}
 
-    <g stroke={color} stroke-width={4} {fill}>
+    <g stroke={cssColor} stroke-width={4} {fill}>
       {#each positions as position (position)}
         <ShapeComponent x={position} />
       {/each}
@@ -78,10 +79,13 @@
 
 <style>
   .card {
-    --select-color: #d3d3d3;
+    --select-color: light-dark(#d3d3d3, #505050);
+    --card-color-red: light-dark(red, #ff6b6b);
+    --card-color-green: light-dark(green, #4caf50);
+    --card-color-purple: light-dark(purple, #bb86fc);
 
-    background-color: white;
-    border: 2px #e8e8e8 solid;
+    background-color: light-dark(white, #2a2a2a);
+    border: 2px light-dark(#e8e8e8, #444444) solid;
   }
 
   button.card {
