@@ -45,4 +45,9 @@
     background-color: light-dark(#e8a1a1, #4a1e1e);
     color: light-dark(#ad2b2b, #e88a8a);
   }
+
+  .variant-warning {
+    background-color: light-dark(#f0e3a3, #4a3f1a);
+    color: light-dark(#7a5c0f, #e8d48a);
+  }
 </style>

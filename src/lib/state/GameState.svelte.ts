@@ -109,7 +109,7 @@ export default class GameState {
     }
 
     if (this.sets.some((set) => set.hasAllCards(cards))) {
-      this.#messageState.message = { type: "error", text: "You already found that set. :(" };
+      this.#messageState.message = { type: "warning", text: "You already found that set. :(" };
       return;
     }
 

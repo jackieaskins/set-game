@@ -1,4 +1,4 @@
-export type MessageType = "success" | "error" | "default";
+export type MessageType = "success" | "warning" | "error" | "default";
 
 export const Color = {
   Red: "red",
