@@ -49,7 +49,7 @@
 <GameWonModal />
 <Confetti />
 
-<div class="wrapper">
+<main class="wrapper">
   <PageHeader />
 
   <div class="cards">
@@ -107,7 +107,7 @@
       </div>
     {/each}
   </div>
-</div>
+</main>
 
 <style>
   .wrapper {

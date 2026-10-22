@@ -6,6 +6,8 @@ import type { MessageState } from "./MessageState.svelte";
 import GameTimerState from "./GameTimerState.svelte";
 import { getPageVisibilityContext } from "$lib/context/pageVisibilityContext";
 import { NUM_SETS, ONE_DAY_MS } from "$lib/constants";
+import StatsState, { type Stats } from "./StatsState.svelte";
+import { getDateId } from "$lib/utils/dateId";
 
 interface GameStateStorage {
   dateId: string;
@@ -19,12 +21,14 @@ const EXPECTED_SETS = 6;
 const GAME_STATE_LOCAL_STORAGE_KEY = "set-game-game-state";
 
 export default class GameState {
+  readonly #statsState = new StatsState(this);
+
   public readonly date = new SvelteDate();
   public readonly gameNumber = Math.floor(
     (this.date.valueOf() - DAY_ZERO_DATE.valueOf()) / ONE_DAY_MS,
   );
-  readonly #dateId = new Intl.DateTimeFormat("en-US").format(this.date);
-  readonly #cards = getCardsFor(this.#dateId);
+  readonly dateId = getDateId(this.date);
+  readonly #cards = getCardsFor(this.dateId);
 
   readonly #pageVisibilityState = getPageVisibilityContext();
   readonly #timer = new GameTimerState();
@@ -53,12 +57,13 @@ export default class GameState {
     $effect(() => {
       if (this.sets.length >= EXPECTED_SETS) {
         this.#timer.stop();
+        this.#statsState.updateStats();
       }
     });
 
     $effect(() => {
       const newGameState: GameStateStorage = {
-        dateId: this.#dateId,
+        dateId: this.dateId,
         sets: this.sets.map(({ cards }) => cards),
         timeElapsed: this.timeElapsed,
       };
@@ -76,7 +81,7 @@ export default class GameState {
       localStorage.getItem(GAME_STATE_LOCAL_STORAGE_KEY) ?? "{}",
     ) as Partial<GameStateStorage>;
 
-    const hasSavedGameState = this.#dateId === dateId;
+    const hasSavedGameState = this.dateId === dateId;
 
     return {
       timeElapsed: hasSavedGameState ? timeElapsed : 0,
@@ -100,6 +105,10 @@ export default class GameState {
 
   public get hasWon(): boolean {
     return this.sets.length >= NUM_SETS;
+  }
+
+  public get stats(): Stats {
+    return this.#statsState.stats;
   }
 
   public tryAddSet(cards: CardDetails[]): void {

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { NUM_SETS } from "$lib/constants";
   import { getGameContext } from "$lib/context/gameContext";
   import { getShortTimeFormat } from "$lib/utils/timeFormatter.svelte";
 
@@ -14,7 +13,7 @@
   let shortTime = $derived(getShortTimeFormat(gameState.timeElapsed));
 
   $effect(() => {
-    if (gameState.sets.length >= NUM_SETS) {
+    if (gameState.hasWon) {
       dialog.showModal();
     }
   });
@@ -39,6 +38,11 @@
 
   <p>Wow you're so smart!</p>
   <p>You solved today's Set Game puzzle in <b>{shortTime}</b>.</p>
+
+  <br />
+
+  <p><b>Current streak:</b> {gameState.stats.streak} games</p>
+  <p><b>Best time:</b> {gameState.stats.bestTime ?? "-"}</p>
 
   <div class="actions">
     <button
