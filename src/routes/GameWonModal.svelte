@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getGameContext } from "$lib/context/gameContext";
-  import { getShortTimeFormat } from "$lib/utils/timeFormatter.svelte";
+  import { getFullTimeFormat, getShortTimeFormat } from "$lib/utils/timeFormatter.svelte";
 
   let dialog: HTMLDialogElement;
 
@@ -11,6 +11,9 @@
 
   const gameState = getGameContext();
   let shortTime = $derived(getShortTimeFormat(gameState.timeElapsed));
+  const bestTime = $derived(
+    gameState.stats.bestTime ? getFullTimeFormat(gameState.stats.bestTime) : "-",
+  );
 
   $effect(() => {
     if (gameState.hasWon) {
@@ -42,7 +45,7 @@
   <br />
 
   <p><b>Current streak:</b> {gameState.stats.streak} games</p>
-  <p><b>Best time:</b> {gameState.stats.bestTime ?? "-"}</p>
+  <p><b>Best time:</b> {bestTime}</p>
 
   <div class="actions">
     <button
